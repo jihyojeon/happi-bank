@@ -6,8 +6,14 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
+app.message('hello', async ({ message, say }) => {
+  console.log('test');
+  await say(`Hey there <@${message.user}>!`);
+});
+
 // Listen for users opening your App Home
 app.event('app_home_opened', async ({ event, client, logger }) => {
+  console.log('app home open!');
   try {
     // Call views.publish with the built-in client
     const result = await client.views.publish({
