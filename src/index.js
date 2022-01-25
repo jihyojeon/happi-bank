@@ -1,4 +1,5 @@
 const app = require('./app');
+const db = require('./db');
 
 //fire up the app
 (async () => {
