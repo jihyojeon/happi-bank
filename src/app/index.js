@@ -10,9 +10,8 @@ const app = new App({
   port: process.env.PORT || 3000,
 });
 
-app.message('hello', async ({ message, say }) => {
-  await say(`Hey there <@${message.user}>!`);
-});
+//messages
+app.message('hello', handlers.messages.sayHello);
 
 //events
 app.event('app_home_opened', handlers.events.appHomeOpened);
