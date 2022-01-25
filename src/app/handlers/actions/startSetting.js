@@ -1,9 +1,16 @@
+const db = require('../../../db');
+
+// const create = async (body) => {
+//   console.log(body);
+// };
+
 module.exports = async ({ body, ack, client }) => {
   await ack();
   try {
-    const result = await client.views.open({
+    await client.views.open({
       trigger_id: body.trigger_id,
       view: {
+        callback_id: 'createSaving',
         title: {
           type: 'plain_text',
           text: 'Create your vault',

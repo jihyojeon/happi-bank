@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { App } = require('@slack/bolt');
 const handlers = require('./handlers');
+const controllers = require('./controllers');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -18,5 +19,7 @@ app.event('app_home_opened', handlers.events.appHomeOpened);
 
 //actions
 app.action('startSetting', handlers.actions.startSetting);
+
+app.view('createSaving', controllers.createSaving);
 
 module.exports = app;
