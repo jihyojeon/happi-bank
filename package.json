@@ -2,9 +2,11 @@
   "name": "happi-bank",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "watch": "nodemon --trace-warnings ."
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,8 @@
   "homepage": "https://github.com/JIHYO-JEON/happi-bank#readme",
   "dependencies": {
     "@slack/bolt": "^3.9.0",
-    "dotenv": "^14.2.0"
+    "dotenv": "^14.2.0",
+    "firebase-admin": "^10.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
