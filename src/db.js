@@ -62,10 +62,10 @@ const popMemory = async ({ workspaceId }) => {
     const happiBank = await findSaving({ workspaceId });
     const thisYear = happiBank.thisYear;
     const memory = thisYear[getRandomInt(thisYear.length)];
-    console.log(memory);
     await workspaces.doc(`${workspaceId}`).update({
       thisYear: FieldValue.arrayRemove(memory),
     });
+    return memory;
   } catch (error) {
     console.error(error);
   }

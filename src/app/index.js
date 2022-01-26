@@ -14,20 +14,18 @@ const app = new App({
 // ONLY FOR TEST
 app.message('오픈 테스트', handlers.messages.timeToOpen);
 app.message('메모리 테스트', handlers.messages.sendMemory);
-app.message('팝 메모리', controllers.popMemory);
 
 //messages
 app.message(/[A-Za-z]/g, handlers.messages.sayHello);
+app.action('withdraw', handlers.messages.sendMemory);
 
 //events
 app.event('app_home_opened', handlers.events.appHomeOpened);
 
 //actions
 app.action('startSetting', handlers.actions.startSetting);
-app.action('addMemory', handlers.actions.addMemory);
-
-//views
 app.view('createSaving', controllers.createSaving);
+app.action('addMemory', handlers.actions.addMemory);
 app.view('updateSaving', controllers.updateSaving);
 
 // const CronJob = require('cron').CronJob;

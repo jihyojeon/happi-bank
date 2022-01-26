@@ -1,8 +1,11 @@
 const controllers = require('../../controllers');
+const moment = require('moment');
 
-const sampleText = `Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory Sample Memory \n - _18th Jan, Jihyo_`;
-
-module.exports = async ({ say }) => {
+module.exports = async ({ body, say }) => {
+  const { text, userId, date } = await controllers.popMemory({ body });
+  const message = `${text} \n _-${moment(date).format(
+    'Do MMM'
+  )}_, <@${userId}>`;
   await say({
     blocks: [
       {
@@ -12,7 +15,7 @@ module.exports = async ({ say }) => {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: sampleText,
+          text: message,
         },
       },
       {
