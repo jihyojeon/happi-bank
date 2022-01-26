@@ -12,7 +12,7 @@ const FieldValue = admin.firestore.FieldValue;
 const findSaving = async (workspaceId) => {
   try {
     const workspace = await workspaces.doc(workspaceId).get();
-    return workspace.exists ? workspace.data : false;
+    return workspace.exists ? workspace.data() : false;
   } catch (error) {
     console.error(error);
   }

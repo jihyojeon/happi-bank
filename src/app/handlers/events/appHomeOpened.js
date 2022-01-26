@@ -61,8 +61,8 @@ const showDepositButton = async ({ event, client }) => {
 };
 
 module.exports = async ({ body, event, client }) => {
-  const workspace = await controllers.findSaving({ body });
-  workspace
+  const happiBank = await controllers.findSaving({ body });
+  happiBank
     ? showDepositButton({ event, client })
     : showStartSetting({ event, client });
 };
