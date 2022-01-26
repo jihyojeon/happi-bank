@@ -30,6 +30,16 @@ const createSaving = async ({ workspaceId, dueDate }) => {
   }
 };
 
+const startNewYear = async ({ workspaceId, dueDate }) => {
+  try {
+    await workspaces.doc(`${workspaceId}`).update({
+      dueDate,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const updateSaving = async ({ workspaceId, context }) => {
   try {
     await workspaces.doc(`${workspaceId}`).update({
@@ -47,6 +57,7 @@ const stuffingThisYear = async ({ workspaceId, YYYY }) => {
     thisYear[YYYY] = happiBank.thisYear;
     await workspaces.doc(`${workspaceId}`).update({
       pastYears: { ...thisYear },
+      dueDate: '',
     });
   } catch (error) {
     console.error(error);
@@ -74,6 +85,7 @@ const popMemory = async ({ workspaceId }) => {
 
 module.exports = {
   createSaving,
+  startNewYear,
   findSaving,
   updateSaving,
   stuffingThisYear,

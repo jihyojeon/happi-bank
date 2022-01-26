@@ -42,8 +42,43 @@ const sendLast = async ({ say, message }) => {
               text: '🌱 Start saving happy memories',
               emoji: true,
             },
-            value: 'click_me_123',
-            action_id: 'actionId-0',
+            value: 'startSetting',
+            action_id: 'startSetting',
+          },
+        ],
+      },
+    ],
+  });
+};
+
+const sendOne = async ({ say, message }) => {
+  await say({
+    blocks: [
+      {
+        type: 'divider',
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: message,
+        },
+      },
+      {
+        type: 'divider',
+      },
+      {
+        type: 'actions',
+        elements: [
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: '💗 Thank you, Next 💗',
+              emoji: true,
+            },
+            value: 'withdraw',
+            action_id: 'withdraw',
           },
         ],
       },
@@ -57,38 +92,5 @@ module.exports = async ({ body, say, ack }) => {
   const message = `${text} \n _-${moment(date).format(
     'Do MMM'
   )}_, <@${userId}>`;
-  isLast
-    ? sendLast({ say, message })
-    : await say({
-        blocks: [
-          {
-            type: 'divider',
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: message,
-            },
-          },
-          {
-            type: 'divider',
-          },
-          {
-            type: 'actions',
-            elements: [
-              {
-                type: 'button',
-                text: {
-                  type: 'plain_text',
-                  text: '💗 Thank you, Next 💗',
-                  emoji: true,
-                },
-                value: 'withdraw',
-                action_id: 'withdraw',
-              },
-            ],
-          },
-        ],
-      });
+  isLast ? sendLast({ say, message }) : sendOne({ say, message });
 };

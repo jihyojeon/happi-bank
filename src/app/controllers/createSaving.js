@@ -6,7 +6,11 @@ module.exports = async ({ ack, body, client }) => {
     body.view.state.values.selected_date.selected_date.selected_option.value;
   const workspaceId = body.view.team_id;
   const userId = body.user.id;
-  await db.createSaving({ workspaceId, dueDate });
+  // check dueDate
+  const workspace = await db.findSaving({ workspaceId });
+  workspace
+    ? await db.startNewYear({ workspaceId, dueDate })
+    : await db.createSaving({ workspaceId, dueDate });
   try {
     await client.views.publish({
       user_id: userId,

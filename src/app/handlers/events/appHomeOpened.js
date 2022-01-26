@@ -130,14 +130,28 @@ const showWithdrawButton = async ({ event, client }) => {
 };
 
 const canIOpen = (happiBank) => {
-  return happiBank.dueDate < moment().format('MMDD') ? true : false;
+  return happiBank.dueDate && happiBank.dueDate < moment().format('MMDD')
+    ? true
+    : false;
+};
+
+const isNewYear = (happiBank) => {
+  return happiBank.dueDate ? false : true;
 };
 
 module.exports = async ({ body, event, client }) => {
   const happiBank = await controllers.findSaving({ body });
-  happiBank
-    ? canIOpen(happiBank)
-      ? showWithdrawButton({ event, client })
-      : showDepositButton({ event, client })
-    : showStartSetting({ event, client });
+  if (happiBank) {
+    if (isNewYear(happiBank)) {
+      showStartSetting({ event, client });
+    } else {
+      if (canIOpen(happiBank)) {
+        showWithdrawButton({ event, client });
+      } else {
+        showDepositButton({ event, client });
+      }
+    }
+  } else {
+    showStartSetting({ event, client });
+  }
 };
