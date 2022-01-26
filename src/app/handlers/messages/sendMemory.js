@@ -1,11 +1,7 @@
 const controllers = require('../../controllers');
 const moment = require('moment');
 
-module.exports = async ({ body, say }) => {
-  const { text, userId, date } = await controllers.popMemory({ body });
-  const message = `${text} \n _-${moment(date).format(
-    'Do MMM'
-  )}_, <@${userId}>`;
+const sendLast = async ({ say, message }) => {
   await say({
     blocks: [
       {
@@ -22,20 +18,77 @@ module.exports = async ({ body, say }) => {
         type: 'divider',
       },
       {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: "👏👏👏 You've been great this year.",
+          emoji: true,
+        },
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: 'This was the last one. Do you want to start *new* saving for the next year?',
+        },
+      },
+      {
         type: 'actions',
         elements: [
           {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: '💗 Thank you, Next 💗',
+              text: '🌱 Start saving happy memories',
               emoji: true,
             },
-            value: 'withdraw',
-            action_id: 'withdraw',
+            value: 'click_me_123',
+            action_id: 'actionId-0',
           },
         ],
       },
     ],
   });
+};
+
+module.exports = async ({ body, say, ack }) => {
+  ack();
+  const { text, userId, date, isLast } = await controllers.popMemory({ body });
+  const message = `${text} \n _-${moment(date).format(
+    'Do MMM'
+  )}_, <@${userId}>`;
+  isLast
+    ? sendLast({ say, message })
+    : await say({
+        blocks: [
+          {
+            type: 'divider',
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: message,
+            },
+          },
+          {
+            type: 'divider',
+          },
+          {
+            type: 'actions',
+            elements: [
+              {
+                type: 'button',
+                text: {
+                  type: 'plain_text',
+                  text: '💗 Thank you, Next 💗',
+                  emoji: true,
+                },
+                value: 'withdraw',
+                action_id: 'withdraw',
+              },
+            ],
+          },
+        ],
+      });
 };

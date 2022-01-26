@@ -13,7 +13,7 @@ const app = new App({
 
 // ONLY FOR TEST
 app.message('오픈 테스트', handlers.messages.timeToOpen);
-app.message('메모리 테스트', handlers.messages.sendMemory);
+// app.message('메모리 테스트', handlers.messages.sendMemory);
 
 //messages
 app.message(/[A-Za-z]/g, handlers.messages.sayHello);
