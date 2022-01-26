@@ -1,9 +1,36 @@
 const db = require('../../db');
 
-module.exports = async ({ body }) => {
+module.exports = async ({ ack, body, client }) => {
+  await ack();
   const dueDate =
     body.view.state.values.selected_date.selected_date.selected_option.value;
   const workspaceId = body.view.team_id;
   await db.createSaving(workspaceId, dueDate);
-  console.log('Saving Created!');
+  try {
+    await client.views.publish({
+      user_id: body.user.id,
+      view: {
+        type: 'home',
+        blocks: [
+          {
+            type: 'actions',
+            elements: [
+              {
+                type: 'button',
+                text: {
+                  type: 'plain_text',
+                  text: '📥  Deposit your happy memory ',
+                  emoji: true,
+                },
+                value: 'addMemory',
+                action_id: 'addMemory',
+              },
+            ],
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };

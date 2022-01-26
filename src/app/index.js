@@ -19,6 +19,7 @@ app.event('app_home_opened', handlers.events.appHomeOpened);
 
 //actions
 app.action('startSetting', handlers.actions.startSetting);
+app.action('addMemory', handlers.actions.addMemory);
 
 app.view('createSaving', controllers.createSaving);
 

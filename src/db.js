@@ -22,18 +22,8 @@ const createSaving = async (workspaceId, dueDate) => {
 
 const findSaving = async (workspaceId) => {
   try {
-    const workspace = await workspaces.get(workspaceId);
-    return workspace.exists ? workspace : false;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const test = async () => {
-  try {
-    await db.collection('test_table').doc(`test_element`).set({
-      testkey: 'testvalue',
-    });
+    const workspace = await workspaces.doc(workspaceId).get();
+    return workspace.exists ? workspace.data : false;
   } catch (error) {
     console.error(error);
   }

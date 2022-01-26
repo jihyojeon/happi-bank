@@ -1,4 +1,4 @@
-const db = require('../../../db');
+const controllers = require('../../controllers');
 
 const showStartSetting = async ({ event, client }) => {
   try {
@@ -47,8 +47,8 @@ const showDepositButton = async ({ event, client }) => {
                   text: '📥  Deposit your happy memory ',
                   emoji: true,
                 },
-                value: 'add',
-                action_id: 'add',
+                value: 'addMemory',
+                action_id: 'addMemory',
               },
             ],
           },
@@ -61,8 +61,7 @@ const showDepositButton = async ({ event, client }) => {
 };
 
 module.exports = async ({ body, event, client }) => {
-  const workspaceId = body.team_id;
-  const workspace = await db.findSaving(workspaceId);
+  const workspace = await controllers.findSaving({ body });
   workspace
     ? showDepositButton({ event, client })
     : showStartSetting({ event, client });
