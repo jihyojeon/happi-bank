@@ -1,4 +1,5 @@
 module.exports = {
-  createSaving: require('./createSaving'),
   findSaving: require('./findSaving'),
+  createSaving: require('./createSaving'),
+  updateSaving: require('./updateSaving'),
 };

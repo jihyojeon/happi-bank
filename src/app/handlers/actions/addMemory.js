@@ -4,6 +4,7 @@ module.exports = async ({ body, ack, client }) => {
     await client.views.open({
       trigger_id: body.trigger_id,
       view: {
+        callback_id: 'updateSaving',
         title: {
           type: 'plain_text',
           text: 'Deposit your happiness',
@@ -33,10 +34,11 @@ module.exports = async ({ body, ack, client }) => {
           },
           {
             type: 'input',
+            block_id: 'text',
             element: {
               type: 'plain_text_input',
               multiline: true,
-              action_id: 'plain_text_input-action',
+              action_id: 'text',
             },
             label: {
               type: 'plain_text',

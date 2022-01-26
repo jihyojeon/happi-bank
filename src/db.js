@@ -7,6 +7,16 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const workspaces = db.collection('workspace');
+const FieldValue = admin.firestore.FieldValue;
+
+const findSaving = async (workspaceId) => {
+  try {
+    const workspace = await workspaces.doc(workspaceId).get();
+    return workspace.exists ? workspace.data : false;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const createSaving = async (workspaceId, dueDate) => {
   try {
@@ -20,13 +30,14 @@ const createSaving = async (workspaceId, dueDate) => {
   }
 };
 
-const findSaving = async (workspaceId) => {
+const updateSaving = async ({ workspaceId, context }) => {
   try {
-    const workspace = await workspaces.doc(workspaceId).get();
-    return workspace.exists ? workspace.data : false;
+    await workspaces.doc(`${workspaceId}`).update({
+      thisYear: FieldValue.arrayUnion(context),
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
-module.exports = { createSaving, findSaving };
+module.exports = { createSaving, findSaving, updateSaving };

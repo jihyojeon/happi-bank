@@ -22,5 +22,6 @@ app.action('startSetting', handlers.actions.startSetting);
 app.action('addMemory', handlers.actions.addMemory);
 
 app.view('createSaving', controllers.createSaving);
+app.view('updateSaving', controllers.updateSaving);
 
 module.exports = app;
