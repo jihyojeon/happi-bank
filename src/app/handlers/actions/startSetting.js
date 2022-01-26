@@ -1,9 +1,3 @@
-const db = require('../../../db');
-
-// const create = async (body) => {
-//   console.log(body);
-// };
-
 module.exports = async ({ body, ack, client }) => {
   await ack();
   try {
@@ -37,6 +31,7 @@ module.exports = async ({ body, ack, client }) => {
           },
           {
             type: 'input',
+            block_id: 'selected_date',
             element: {
               type: 'static_select',
               placeholder: {
@@ -70,7 +65,7 @@ module.exports = async ({ body, ack, client }) => {
                   value: '1231',
                 },
               ],
-              action_id: 'static_select-action',
+              action_id: 'selected_date',
             },
             label: {
               type: 'plain_text',

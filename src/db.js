@@ -39,4 +39,4 @@ const test = async () => {
   }
 };
 
-module.exports = { findSaving };
+module.exports = { createSaving, findSaving };
