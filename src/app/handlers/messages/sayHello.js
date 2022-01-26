@@ -10,7 +10,7 @@ module.exports = async ({ message, say, body }) => {
   const happiBank = await controllers.findSaving({ body });
   await say(
     happiBank
-      ? `Hey <@${message.user}>! You can open me on ${
+      ? `Hey <@${message.user}>! You can open me after ${
           dateOptions[happiBank.dueDate]
         } ⏱`
       : `Hey <@${message.user}>! Please start saving happy memories!`
