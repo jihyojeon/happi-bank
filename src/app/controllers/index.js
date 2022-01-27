@@ -3,4 +3,5 @@ module.exports = {
   createSaving: require('./createSaving'),
   updateSaving: require('./updateSaving'),
   popMemory: require('./popMemory'),
+  updateId: require('./updateId'),
 };

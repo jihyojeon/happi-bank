@@ -24,6 +24,7 @@ const createSaving = async ({ workspaceId, dueDate }) => {
       dueDate: dueDate,
       pastYears: {},
       thisYear: [],
+      channelId: '',
     });
   } catch (error) {
     console.error(error);
@@ -44,6 +45,16 @@ const updateSaving = async ({ workspaceId, context }) => {
   try {
     await workspaces.doc(`${workspaceId}`).update({
       thisYear: FieldValue.arrayUnion(context),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const createChannel = async ({ workspaceId, channelId }) => {
+  try {
+    await workspaces.doc(`${workspaceId}`).update({
+      channelId: channelId,
     });
   } catch (error) {
     console.error(error);
@@ -90,4 +101,5 @@ module.exports = {
   updateSaving,
   stuffingThisYear,
   popMemory,
+  createChannel,
 };
