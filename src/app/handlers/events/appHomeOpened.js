@@ -141,17 +141,21 @@ const isNewYear = (happiBank) => {
 
 module.exports = async ({ body, event, client }) => {
   const happiBank = await controllers.findSaving({ body });
-  if (happiBank) {
-    if (isNewYear(happiBank)) {
-      showStartSetting({ event, client });
-    } else {
-      if (canIOpen(happiBank)) {
-        showWithdrawButton({ event, client });
-      } else {
-        showDepositButton({ event, client });
-      }
-    }
-  } else {
+
+  const shouldShowOnboarding =
+    !happiBank || (happiBank && isNewYear(happiBank));
+
+  if (shouldShowOnboarding) {
     showStartSetting({ event, client });
+  } else {
+    showHomeScreen(happiBank);
   }
 };
+
+function showHomeScreen(happiBank) {
+  if (canIOpen(happiBank)) {
+    showWithdrawButton({ event, client });
+  } else {
+    showDepositButton({ event, client });
+  }
+}
