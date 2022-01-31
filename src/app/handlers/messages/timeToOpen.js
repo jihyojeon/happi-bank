@@ -51,13 +51,16 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
         client,
         body,
       });
+    } else if (error.data.error === 'cant_invite') {
+      console.log('already invited');
+      return channelId;
     } else {
       console.error(error.data.error);
     }
   }
 };
 
-module.exports = async ({ body, client, context, say }) => {
+module.exports = async ({ body, client, context }) => {
   const userIds = await getAllUsers({ client });
 
   const Happibank = await controllers.findSaving({ body });
