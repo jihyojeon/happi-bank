@@ -22,7 +22,11 @@ const createChannel = async ({ body, client }) => {
     controllers.updateId({ body, channelId });
     return channelId;
   } catch (error) {
-    console.error(error.data.error);
+    if (error.data.error === 'name_taken') {
+      //ignore
+    } else {
+      console.error(error.data.error);
+    }
   }
 };
 
@@ -35,19 +39,20 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
     });
     return channelId;
   } catch (error) {
-    console.error(error);
-    if (error.data.error === 'channel_not_found') {
-      // create channel and update channelID
-      const newChannelID = createChannel({ body, client });
-      // and invite again
+    if (
+      error.data.error === 'channel_not_found' ||
+      error.data.error === 'not_in_channel'
+    ) {
+      const newChannelId = await createChannel({ body, client });
       await inviteAll({
-        channelId: newChannelID,
+        channelId: newChannelId,
         userIds,
         context,
         client,
         body,
       });
-      return newChannelID;
+    } else {
+      console.error(error.data.error);
     }
   }
 };
@@ -61,7 +66,7 @@ module.exports = async ({ body, client, context, say }) => {
   if (!channelId) {
     channelId = await createChannel({ body, client });
   }
-  channelId = await inviteAll({ channelId, userIds, context, client });
+  channelId = await inviteAll({ channelId, userIds, context, body, client });
 
   try {
     await client.chat.postMessage({
