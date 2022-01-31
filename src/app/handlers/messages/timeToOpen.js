@@ -13,15 +13,42 @@ const getAllUsers = async ({ client }) => {
   return userIds.join(', ');
 };
 
-const inviteAll = async ({ channelId, userIds, context, client }) => {
+const createChannel = async ({ body, client }) => {
+  try {
+    const result = await client.conversations.create({
+      name: 'happi-memories',
+    });
+    channelId = result.channel.id;
+    controllers.updateId({ body, channelId });
+    return channelId;
+  } catch (error) {
+    console.error(error.data.error);
+  }
+};
+
+const inviteAll = async ({ channelId, userIds, context, client, body }) => {
   try {
     await client.conversations.invite({
       channel: channelId,
       users: userIds,
       token: context.botToken,
     });
+    return channelId;
   } catch (error) {
     console.error(error);
+    if (error.data.error === 'channel_not_found') {
+      // create channel and update channelID
+      const newChannelID = createChannel({ body, client });
+      // and invite again
+      await inviteAll({
+        channelId: newChannelID,
+        userIds,
+        context,
+        client,
+        body,
+      });
+      return newChannelID;
+    }
   }
 };
 
@@ -32,18 +59,9 @@ module.exports = async ({ body, client, context, say }) => {
   let channelId = Happibank.channelId;
 
   if (!channelId) {
-    try {
-      const result = await client.conversations.create({
-        name: 'happi-memories',
-      });
-      channelId = result.channel.id;
-      controllers.updateId({ body, channelId });
-    } catch (error) {
-      console.error(error.data.error);
-    }
+    channelId = await createChannel({ body, client });
   }
-
-  await inviteAll({ channelId, userIds, context, client });
+  channelId = await inviteAll({ channelId, userIds, context, client });
 
   try {
     await client.chat.postMessage({
