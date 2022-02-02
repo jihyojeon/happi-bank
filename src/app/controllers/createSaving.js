@@ -1,6 +1,6 @@
 const db = require('../../db');
 
-module.exports = async ({ ack, body, client }) => {
+module.exports = async ({ ack, body, client, context }) => {
   await ack();
   const dueDate =
     body.view.state.values.selected_date.selected_date.selected_option.value;

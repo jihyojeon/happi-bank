@@ -6,8 +6,12 @@ const dateOptions = {
   1231: "New Year's eve",
 };
 
+//{ message, say, body }
 module.exports = async ({ message, say, body }) => {
+  // console.log(props);
+  // const { message, say, body } = props;
   const happiBank = await controllers.findSaving({ body });
+  console.log('hello');
   await say(
     happiBank
       ? `Hey <@${message.user}>! You can open me after ${

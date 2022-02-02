@@ -44,7 +44,7 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
       error.data.error === 'not_in_channel'
     ) {
       const newChannelId = await createChannel({ body, client });
-      await inviteAll({
+      return await inviteAll({
         channelId: newChannelId,
         userIds,
         context,
@@ -65,12 +65,10 @@ module.exports = async ({ body, client, context }) => {
 
   const Happibank = await controllers.findSaving({ body });
   let channelId = Happibank.channelId;
-
   if (!channelId) {
     channelId = await createChannel({ body, client });
   }
   channelId = await inviteAll({ channelId, userIds, context, body, client });
-
   try {
     await client.chat.postMessage({
       channel: channelId,

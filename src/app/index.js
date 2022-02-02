@@ -2,6 +2,8 @@ require('dotenv').config();
 const { App } = require('@slack/bolt');
 const handlers = require('./handlers');
 const controllers = require('./controllers');
+const moment = require('moment');
+const CronJob = require('cron').CronJob;
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -28,16 +30,18 @@ app.view('createSaving', controllers.createSaving);
 app.action('addMemory', handlers.actions.addMemory);
 app.view('updateSaving', controllers.updateSaving);
 
-// const CronJob = require('cron').CronJob;
-// const job = new CronJob(
-//   '* * * * * *', // cronTime
-//   function () {
-//     console.log('You will see this message every second');
-//   }, // onTick
-//   null, // onComplete
-//   true, // start
-//   'America/Los_Angeles' // timezone
-// );
-// job.start();
+//reminder
+const job = new CronJob(
+  '* * * * * *', // cronTime
+  function () {
+    // app.message(handlers.messages.sayHello);
+    // console.log('test');
+  }, // onTick
+  null, // onComplete
+  true, // start
+  'America/Los_Angeles' // timezone
+);
+
+job.start();
 
 module.exports = app;
