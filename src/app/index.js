@@ -14,11 +14,11 @@ const app = new App({
 });
 
 // ONLY FOR TEST
+app.message(/when/g, handlers.messages.sayHello);
 // app.message('오픈 테스트', handlers.messages.timeToOpen);
-app.action('addMemory', handlers.messages.timeToOpen);
+// app.action('addMemory', handlers.messages.timeToOpen);
 //messages
 // /[A-Za-z]/g
-app.message('when', handlers.messages.sayHello);
 app.action('withdraw', handlers.messages.sendMemory);
 
 //events
@@ -31,20 +31,6 @@ app.action('addMemory', handlers.actions.addMemory);
 app.view('updateSaving', controllers.updateSaving);
 
 //reminder
-const job = new CronJob(
-  '* * * * * *', // cronTime
-  function () {
-    // app.message(handlers.messages.sayHello);
-    // console.log('test');
-  }, // onTick
-  null, // onComplete
-  true, // start
-  'America/Los_Angeles' // timezone
-);
-
-//test
-//cz c test
-
-job.start();
+app.use(handlers.scheduler.openReminder);
 
 module.exports = app;

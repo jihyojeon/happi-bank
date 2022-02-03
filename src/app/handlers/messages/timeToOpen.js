@@ -60,10 +60,8 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
   }
 };
 
-module.exports = async ({ body, client, context }) => {
+module.exports = async ({ body, client, context, Happibank }) => {
   const userIds = await getAllUsers({ client });
-
-  const Happibank = await controllers.findSaving({ body });
   let channelId = Happibank.channelId;
   if (!channelId) {
     channelId = await createChannel({ body, client });

@@ -20,3 +20,7 @@ module.exports = async ({ message, say, body }) => {
       : `Hey <@${message.user}>! Please start saving happy memories!`
   );
 };
+
+// module.exports = () => {
+//   console.log('hello');
+// };
