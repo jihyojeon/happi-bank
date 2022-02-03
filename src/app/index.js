@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { App } = require('@slack/bolt');
+const { App, LogLevel } = require('@slack/bolt');
 const handlers = require('./handlers');
 const controllers = require('./controllers');
 const moment = require('moment');
@@ -10,6 +10,7 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   appToken: process.env.SLACK_APP_TOKEN,
   port: process.env.PORT || 3000,
+  logLevel: LogLevel.DEBUG,
 });
 
 // ONLY FOR TEST
