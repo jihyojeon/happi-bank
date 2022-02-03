@@ -30,7 +30,7 @@ app.view('createSaving', controllers.createSaving);
 app.action('addMemory', handlers.actions.addMemory);
 app.view('updateSaving', controllers.updateSaving);
 
-//reminder
+//cronjob
 app.use(handlers.scheduler.openReminder);
 
 module.exports = app;
