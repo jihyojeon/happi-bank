@@ -1,4 +1,5 @@
 const controllers = require('../../controllers');
+const moment = require('moment');
 
 const showStartSetting = async ({ event, client }) => {
   try {
@@ -116,7 +117,7 @@ const showWithdrawButton = async ({ event, client }) => {
             elements: [
               {
                 type: 'mrkdwn',
-                text: '💗 Memories will be sent to #channel.',
+                text: '💗 Memories will be sent to #happi-memories.',
               },
             ],
           },
@@ -129,11 +130,14 @@ const showWithdrawButton = async ({ event, client }) => {
 };
 
 const canIOpen = (happiBank) => {
-  return happiBank && !happiBank.dueDate ? true : false;
+  const today = moment().format('MMDD');
+  return (happiBank && !happiBank.dueDate) || happiBank.dueDate <= today
+    ? true
+    : false;
 };
 
 const isNewYear = (happiBank) => {
-  return happiBank.thisYear.length === 0 ? true : false;
+  return !happiBank.dueDate && happiBank.thisYear.length === 0 ? true : false;
 };
 
 const showHomeScreen = ({ happiBank, event, client }) => {
@@ -145,8 +149,6 @@ const showHomeScreen = ({ happiBank, event, client }) => {
 };
 
 module.exports = async ({ body, event, client }) => {
-  console.log('open');
-
   const happiBank = await controllers.findSaving({ body });
   const shouldShowOnboarding =
     !happiBank || (happiBank && isNewYear(happiBank));

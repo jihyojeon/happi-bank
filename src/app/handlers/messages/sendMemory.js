@@ -1,8 +1,9 @@
 const controllers = require('../../controllers');
 const moment = require('moment');
 
-const sendLast = async ({ say, message }) => {
-  await say({
+const sendLast = async ({ channelId, message, client }) => {
+  await client.chat.postMessage({
+    channel: channelId,
     blocks: [
       {
         type: 'divider',
@@ -51,8 +52,9 @@ const sendLast = async ({ say, message }) => {
   });
 };
 
-const sendOne = async ({ say, message }) => {
-  await say({
+const sendOne = async ({ channelId, message, client }) => {
+  await client.chat.postMessage({
+    channel: channelId,
     blocks: [
       {
         type: 'divider',
@@ -86,11 +88,15 @@ const sendOne = async ({ say, message }) => {
   });
 };
 
-module.exports = async ({ body, say, ack }) => {
+module.exports = async ({ body, ack, client }) => {
   ack();
+  const happiBank = await controllers.findSaving({ body });
+  const channelId = happiBank.channelId;
   const { text, userId, date, isLast } = await controllers.popMemory({ body });
   const message = `${text} \n _-${moment(date).format(
     'Do MMM'
   )}_, <@${userId}>`;
-  isLast ? sendLast({ say, message }) : sendOne({ say, message });
+  isLast
+    ? sendLast({ channelId, message, client })
+    : sendOne({ channelId, message, client });
 };

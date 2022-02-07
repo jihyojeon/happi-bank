@@ -22,7 +22,7 @@
 .firebase/
 firebase-debug.log
 firestore-debug.log
-
+service-account-file.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

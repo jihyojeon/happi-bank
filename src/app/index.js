@@ -2,6 +2,9 @@ require('dotenv').config();
 const { App, LogLevel } = require('@slack/bolt');
 const handlers = require('./handlers');
 const controllers = require('./controllers');
+const { checkAll } = require('../db');
+const CronJob = require('cron').CronJob;
+const moment = require('moment');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -30,7 +33,32 @@ app.view('createSaving', controllers.createSaving);
 app.action('addMemory', handlers.actions.addMemory);
 app.view('updateSaving', controllers.updateSaving);
 
-// //cronjob
-// app.use(handlers.scheduler.openReminder);
+//cronjob
+const todo = (workspace) => {
+  const workspaceId = workspace[0];
+  const dueDate = workspace[1];
+  const today = moment().format('MMDD');
+  if (today === dueDate) {
+    handlers.messages.timeToOpen({ workspaceId, client: app.client });
+  }
+  // handlers.messages.timeToOpen({ workspaceId, client: app.client });
+};
+
+const job = new CronJob(
+  // '0 9 * * *', // at 9 everyday
+  '* * * * *',
+  async () => {
+    const workspaces = await checkAll();
+    workspaces.forEach((workspace) => {
+      console.log(workspace);
+      todo(workspace);
+    });
+  }, // onTick
+  null, // onComplete
+  true, // start
+  'Europe/London' // timezone
+);
+
+job.start();
 
 module.exports = app;

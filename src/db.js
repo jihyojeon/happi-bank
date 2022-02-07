@@ -9,6 +9,22 @@ const db = admin.firestore();
 const workspaces = db.collection('workspace');
 const FieldValue = admin.firestore.FieldValue;
 
+const checkAll = async () => {
+  try {
+    const activeWorkspaces = await workspaces.where('dueDate', '!=', '').get();
+    const returnValue = [];
+    if (activeWorkspaces.empty) {
+      console.log('No active happibanks.');
+    }
+    activeWorkspaces.forEach((doc) => {
+      returnValue.push([doc.id, doc.data().dueDate]);
+    });
+    return returnValue;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const findSaving = async ({ workspaceId }) => {
   try {
     const workspace = await workspaces.doc(workspaceId).get();
@@ -95,6 +111,7 @@ const popMemory = async ({ workspaceId }) => {
 };
 
 module.exports = {
+  checkAll,
   createSaving,
   startNewYear,
   findSaving,

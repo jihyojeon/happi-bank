@@ -30,12 +30,12 @@ const createChannel = async ({ body, client }) => {
   }
 };
 
-const inviteAll = async ({ channelId, userIds, context, client, body }) => {
+const inviteAll = async ({ channelId, userIds, client, body }) => {
   try {
     await client.conversations.invite({
       channel: channelId,
       users: userIds,
-      token: context.botToken,
+      token: client.token,
     });
     return channelId;
   } catch (error) {
@@ -47,7 +47,6 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
       return await inviteAll({
         channelId: newChannelId,
         userIds,
-        context,
         client,
         body,
       });
@@ -60,13 +59,15 @@ const inviteAll = async ({ channelId, userIds, context, client, body }) => {
   }
 };
 
-module.exports = async ({ body, client, context, Happibank }) => {
+module.exports = async ({ workspaceId, client }) => {
   const userIds = await getAllUsers({ client });
-  let channelId = Happibank.channelId;
+  const body = { team_id: workspaceId };
+  const happiBank = await controllers.findSaving({ body });
+  let channelId = happiBank.channelId;
   if (!channelId) {
     channelId = await createChannel({ body, client });
   }
-  channelId = await inviteAll({ channelId, userIds, context, body, client });
+  channelId = await inviteAll({ channelId, userIds, body, client });
   try {
     await client.chat.postMessage({
       channel: channelId,
