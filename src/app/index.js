@@ -45,8 +45,8 @@ const todo = (workspace) => {
 };
 
 const job = new CronJob(
-  // '0 9 * * *', // at 9 everyday
-  '* * * * *',
+  '0 9 * * *', // at 9 everyday
+  // '* * * * *',
   async () => {
     const workspaces = await checkAll();
     workspaces.forEach((workspace) => {
