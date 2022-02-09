@@ -17,7 +17,12 @@ const app = new App({
 
 // ONLY FOR TEST
 app.message(/when/g, handlers.messages.sayHello);
-// app.message('오픈 테스트', handlers.messages.timeToOpen);
+app.message('오픈 테스트', async () => {
+  const workspaces = await checkAll();
+  workspaces.forEach((workspace) => {
+    todo(workspace);
+  });
+});
 // app.action('addMemory', handlers.messages.timeToOpen);
 
 //messages
@@ -38,10 +43,9 @@ const todo = (workspace) => {
   const workspaceId = workspace[0];
   const dueDate = workspace[1];
   const today = moment().format('MMDD');
-  if (today === dueDate) {
+  if (dueDate <= today) {
     handlers.messages.timeToOpen({ workspaceId, client: app.client });
   }
-  // handlers.messages.timeToOpen({ workspaceId, client: app.client });
 };
 
 const job = new CronJob(
@@ -50,7 +54,6 @@ const job = new CronJob(
   async () => {
     const workspaces = await checkAll();
     workspaces.forEach((workspace) => {
-      console.log(workspace);
       todo(workspace);
     });
   }, // onTick
