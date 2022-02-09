@@ -131,9 +131,7 @@ const showWithdrawButton = async ({ event, client }) => {
 
 const canIOpen = (happiBank) => {
   const today = moment().format('MMDD');
-  return (happiBank && !happiBank.dueDate) || happiBank.dueDate <= today
-    ? true
-    : false;
+  return happiBank && !happiBank.dueDate ? true : false;
 };
 
 const isNewYear = (happiBank) => {
